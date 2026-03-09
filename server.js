@@ -14,7 +14,7 @@ const Plan = require('./models/Plan');
 const { authMiddleware, checkRole } = require('./middleware/authMiddleware');
 
 const app = express();
-const PORT = Number(process.env.PORT || 5000);
+const PORT = process.env.PORT || 10000;
 const webRoot = path.resolve(__dirname, '..');
 
 app.use(cors());
@@ -546,9 +546,9 @@ app.get('*', (req, res) => {
 async function start() {
   try {
     await connectDB();
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       // eslint-disable-next-line no-console
-      console.log(`MSA server running on http://localhost:${PORT}`);
+      console.log(`MSA server running on port ${PORT}`);
     });
 
     server.on('error', (error) => {
