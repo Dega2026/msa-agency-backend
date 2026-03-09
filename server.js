@@ -511,36 +511,23 @@ app.use('/services', express.static(path.join(webRoot, 'services')));
 app.use('/admin', express.static(path.join(webRoot, 'public_html', 'admin')));
 app.use(express.static(webRoot));
 
-const pageRoutes = {
-  '/': 'index.html',
-  '/index.html': 'index.html',
-  '/about': 'about.html',
-  '/about.html': 'about.html',
-  '/service': 'service.html',
-  '/service.html': 'service.html',
-  '/news': 'news.html',
-  '/news.html': 'news.html',
-  '/contact': 'contact.html',
-  '/contact.html': 'contact.html',
-  '/404': '404.html',
-  '/404.html': '404.html',
-};
-
-Object.entries(pageRoutes).forEach(([route, file]) => {
-  app.get(route, (_req, res) => {
-    res.sendFile(path.join(webRoot, file));
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    message: 'MSA Agency API is running...',
+    version: '1.0.0',
   });
 });
 
 app.get('/admin', (_req, res) => {
-  res.sendFile(path.join(webRoot, 'public_html', 'admin', 'index.html'));
+  res.status(200).send('Admin Dashboard API Access');
 });
 
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'API route not found' });
   }
-  return res.sendFile(path.join(webRoot, 'index.html'));
+  return res.status(404).send('Resource not found');
 });
 
 async function start() {
